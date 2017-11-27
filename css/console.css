@@ -1,0 +1,46 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#console{
+    font-size: 16px;
+    line-height: 30px;
+    height: 30px;
+    width: 60px;
+    text-align: center;
+    background: #ffb32d;
+    border-radius: 3px;
+    position: fixed;
+    right: 50px;
+    bottom: 50px;
+    cursor: pointer;
+}
+#clear, #hide {
+    width: 50%;
+    height: 40px;
+    position: fixed;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 40px;
+    text-align: center;
+}
+
+#clear {
+    background: #3dadff;
+    left: 0;
+    bottom: 0;
+}
+
+#hide {
+    background: #32ffc3;
+    right: 0;
+    bottom: 0;
+}
+
+#content{
+    width: 100%;
+    position: fixed;
+    bottom:70px;
+    left: 0;
+}
