@@ -105,7 +105,7 @@
             display: 'none'
         });
         this.ohide.innerHTML = 'Hide';
-        this.settingProperty(this.content, {width: '100%', position: 'fixed', left: '0', bottom: '45px'});
+        this.settingProperty(this.content, {width: '100%', position: 'fixed', left: '0', bottom: '42px'});
         this.settingProperty(this.body, {margin: '0', padding: '0'});
     };
 
