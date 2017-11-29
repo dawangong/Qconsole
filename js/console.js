@@ -1,65 +1,195 @@
-let cons=document.getElementById('console');
-let cle=document.getElementById('clear');
-let hid=document.getElementById('hide');
-let content=document.getElementById('content');
-
-//控制效果
-cons.onclick=() => {
-    cle.style.display='block';
-    hid.style.display='block';
-};
-hid.onclick=() => {
-    cle.style.display='none';
-    hid.style.display='none';
-};
-//清除效果
-cle.onclick=() => {
-    let ps=document.getElementsByClassName('ps');
-    while (ps.length>0){
-        ps[0].parentNode.removeChild(ps[0]);
+(function (window) {
+    function Consoles() {
+        this.init();//初始化
     }
-};
-//输出到指定位置
-function control(str) {
-    let op=document.createElement('p');
-    op.innerHTML=str;
-    op.style.borderTop='1px solid black';
-    op.className='ps';
-    content.appendChild(op);
-}
 
-//重写console下的方法
-console.log = (function(oriLogFunc){
-    return function(str)
-    {
-        oriLogFunc.call(console,control(str));
-    }
-})(console.log);
+    Consoles.prototype.init = function () {
+        this.drawingHtml();//创造绘制render tree
+        this.changeMethod();//浅层次修改console下的方法
+        this.bindEvent();   //绑定主体事件
+    };
 
-console.info = (function(oriLogFunc){
-    return function(str)
-    {
-        oriLogFunc.call(console,control(str));
-    }
-})(console.info);
+    Consoles.prototype.drawingHtml = function () {
+        this.prepareEls();  //创建绘制dom树
+        this.settingEls(); //创建绘制css规则树
+    };
 
-console.error = (function(oriLogFunc){
-    return function(str)
-    {
-        oriLogFunc.call(console,control(str));
-    }
-})(console.error);
+    Consoles.prototype.changeMethod = function () {
+        this.batchChangeConsole(); //批量浅层次修改console对象下的方法
+    };
 
-console.warn = (function(oriLogFunc){
-    return function(str)
-    {
-        oriLogFunc.call(console,control(str));
-    }
-})(console.warn);
+    Consoles.prototype.bindEvent = function () {
+        this.consoles.addEventListener('click', () => {
+            this.settingProperty(this.ohide, {display: 'block'});
+            this.settingProperty(this.clear, {display: 'block'});
+            this.settingProperty(this.consoles, {display: 'none'});
+        }, false);
+        this.ohide.addEventListener('click', () => {
+            this.settingProperty(this.ohide, {display: 'none'});
+            this.settingProperty(this.clear, {display: 'none'});
+            this.settingProperty(this.consoles, {display: 'block'});
+        }, false);
 
-console.debug = (function(oriLogFunc){
-    return function(str)
-    {
-        oriLogFunc.call(console,control(str));
-    }
-})(console.debug);
+        this.clear.addEventListener('click', () => {
+            this.pss = this.contain.getElementsByTagName('p');
+            while (this.pss.length > 0) {
+                this.pss[0].parentNode.removeChild(this.pss[0]);
+            }
+        }, false)
+    };
+
+    //主体区域1
+
+    Consoles.prototype.prepareEls = function () {
+        this.contain = this.createEls('div');
+        this.contain.className = 'contain_Consoles';
+        this.consoles = this.createEls('div');
+        this.clear = this.createEls('div');
+        this.ohide = this.createEls('div');
+        this.content = this.createEls('div');
+        this.body = document.getElementsByTagName('body')[0];
+        this.insert([this.consoles, this.clear, this.ohide, this.content]);
+        this.body.appendChild(this.contain);
+    };
+
+    Consoles.prototype.createEls = function (eles) {
+        return document.createElement(eles);
+    };
+
+    Consoles.prototype.insert = function (arr) {
+        for (let i = 0; i < arr.length; i++) {
+            this.contain.appendChild(arr[i]);
+        }
+    };
+
+    Consoles.prototype.settingEls = function () {
+        this.settingProperty(this.consoles, {
+            height: '30px',
+            lineHeight: '30px',
+            color: 'white',
+            textAlign: 'center',
+            background: '#04BE02',
+            position: 'fixed',
+            right: '15px',
+            bottom: '10px',
+            padding: '0px 15px',
+            boxShadow: '1px 1px 3px black',
+            cursor: 'pointer',
+            borderRadius: '4px'
+        });
+        this.consoles.innerHTML = 'Console';
+        this.settingProperty(this.clear, {
+            width: '50%',
+            height: '40px',
+            lineHeight: '40px',
+            border: '1px solid #EEEEEE',
+            position: 'fixed',
+            left: '0',
+            bottom: '0',
+            textAlign: 'center',
+            cursor: 'pointer',
+            display: 'none'
+        });
+        this.clear.innerHTML = 'Clear';
+        this.settingProperty(this.ohide, {
+            width: '50%',
+            height: '40px',
+            lineHeight: '40px',
+            border: '1px solid #EEEEEE',
+            position: 'fixed',
+            right: '0',
+            bottom: '0',
+            textAlign: 'center',
+            cursor: 'pointer',
+            borderLeft: '0',
+            display: 'none'
+        });
+        this.ohide.innerHTML = 'Hide';
+        this.settingProperty(this.content, {width: '100%', position: 'fixed', left: '0', bottom: '45px'});
+        this.settingProperty(this.body, {margin: '0', padding: '0'});
+    };
+
+    Consoles.prototype.settingProperty = function (obj, cssp) {
+        for (let x in cssp) {
+            obj.style[x] = cssp[x];
+        }
+    };
+
+    //主体区域2
+
+    Consoles.prototype.batchChangeConsole = function () {
+        this.pjArr = ['log', 'info', 'error', 'debug', 'warn'];
+        let that = this;
+        for (let i = 0; i < this.pjArr.length; i++) {
+            console[this.pjArr[i]] = (function (temp) {
+                return function (str) {
+                    that.changeConsole(str, temp);
+                }
+            })(this.pjArr[i]);
+        }
+    };
+
+    Consoles.prototype.changeConsole = function (str, obj) {
+        this.ps = this.createEls('p');
+        this.ps.innerHTML = str;
+        this.settingProperty(this.ps, {
+            borderTop: '1px solid #D2D3D7',
+            lineHeight: '25px',
+            height: '25px',
+            margin: '0',
+            cursor: 'text'
+        });
+        this.content.appendChild(this.ps);
+        switch (obj) {
+            case 'log':
+                this.otherEvent('log');
+                break;
+            case 'debug':
+                this.otherEvent('debug');
+                break;
+            case 'info':
+                this.otherEvent('info');
+                break;
+            case 'warn':
+                this.otherEvent('warn');
+                break;
+            case 'error':
+                this.otherEvent('error');
+                break;
+        }
+    };
+
+
+    Consoles.prototype.otherEvent = function (str) {
+        switch (str) {
+            case 'log':
+                this.selectExecute('#EFEFEF');
+                break;
+            case 'debug':
+                this.selectExecute('#defef7');
+                break;
+            case 'info':
+                this.selectExecute('#a8c1fe');
+                break;
+            case 'warn':
+                this.selectExecute('#FEC451');
+                break;
+            case 'error':
+                this.selectExecute('#FD4638');
+                break;
+        }
+    };
+
+    Consoles.prototype.selectExecute = function (color) {
+        this.ps.addEventListener('mouseover', function () {
+            this.style.background = color;
+        }, false);
+        this.ps.addEventListener('mouseout', function () {
+            this.style.background = '';
+        }, false);
+    };
+
+    window.Consoles = Consoles;
+
+})(window);
+
