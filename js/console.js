@@ -28,15 +28,21 @@
             this.settingProperty(this.ohide, {display: 'none'});
             this.settingProperty(this.clear, {display: 'none'});
             this.settingProperty(this.consoles, {display: 'block'});
+            this.clearPrintf();
         }, false);
 
         this.clear.addEventListener('click', () => {
-            this.pss = this.contain.getElementsByTagName('p');
-            while (this.pss.length > 0) {
-                this.pss[0].parentNode.removeChild(this.pss[0]);
-            }
+            this.clearPrintf();
         }, false)
     };
+
+    Consoles.prototype.clearPrintf = function () {
+        this.pss = this.contain.getElementsByTagName('p');
+        while (this.pss.length > 0) {
+            this.pss[0].parentNode.removeChild(this.pss[0]);
+        }
+    };
+
 
     //主体区域1
 
