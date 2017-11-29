@@ -30,7 +30,6 @@
             this.settingProperty(this.consoles, {display: 'block'});
             this.clearPrintf();
         }, false);
-
         this.clear.addEventListener('click', () => {
             this.clearPrintf();
         }, false)
@@ -111,7 +110,14 @@
             display: 'none'
         });
         this.ohide.innerHTML = 'Hide';
-        this.settingProperty(this.content, {width: '100%', position: 'fixed', left: '0', bottom: '42px'});
+        this.settingProperty(this.content, {
+            width: '100%',
+            position: 'fixed',
+            left: '0',
+            bottom: '42px',
+            height: '200px',
+            overflow: 'auto'
+        });
         this.settingProperty(this.body, {margin: '0', padding: '0'});
     };
 
