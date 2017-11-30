@@ -43,7 +43,7 @@
         this.body.appendChild(this.contain);
     };
 
-    Consoles.prototype.createEls = function (obj, eles) {
+    Consoles.prototype.createEls = function (eles) {
         return document.createElement(eles);
     };
 
