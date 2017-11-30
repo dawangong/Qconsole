@@ -23,12 +23,13 @@
             this.settingProperty(this.ohide, {display: 'block'});
             this.settingProperty(this.clear, {display: 'block'});
             this.settingProperty(this.consoles, {display: 'none'});
+            this.settingProperty(this.content, {display: 'block'});
         }, false);
         this.ohide.addEventListener('click', () => {
             this.settingProperty(this.ohide, {display: 'none'});
             this.settingProperty(this.clear, {display: 'none'});
             this.settingProperty(this.consoles, {display: 'block'});
-            this.clearPrintf();
+            this.settingProperty(this.content, {display: 'none'});
         }, false);
         this.clear.addEventListener('click', () => {
             this.clearPrintf();
@@ -116,7 +117,8 @@
             left: '0',
             bottom: '42px',
             height: '200px',
-            overflow: 'auto'
+            overflow: 'auto',
+            display: 'none'
         });
         this.settingProperty(this.body, {margin: '0', padding: '0'});
     };
