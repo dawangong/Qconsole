@@ -157,23 +157,7 @@
             cursor: 'text'
         });
         this.content.appendChild(this.ps);
-        switch (obj) {
-            case 'log':
-                this.otherEvent('log');
-                break;
-            case 'debug':
-                this.otherEvent('debug');
-                break;
-            case 'info':
-                this.otherEvent('info');
-                break;
-            case 'warn':
-                this.otherEvent('warn');
-                break;
-            case 'error':
-                this.otherEvent('error');
-                break;
-        }
+        this.otherEvent(obj);
     };
 
 
