@@ -33,9 +33,9 @@
     //主体区域1(绘制render tree相关方法)
 
     Consoles.prototype.prepareEls = function () {
-        this.controlArr=['contain','consoles','clear','ohide','content'];
-        for (let i=0;i<this.controlArr.length;i++){
-            this[this.controlArr[i]]=this.createEls('div');
+        this.controlArr = ['contain', 'consoles', 'clear', 'ohide', 'content'];
+        for (let i = 0; i < this.controlArr.length; i++) {
+            this[this.controlArr[i]] = this.createEls('div');
         }
         this.contain.className = 'contain_Consoles';
         this.body = document.getElementsByTagName('body')[0];
