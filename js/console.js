@@ -20,48 +20,30 @@
 
     Consoles.prototype.bindEvent = function () {
         this.consoles.addEventListener('click', () => {
-            this.settingProperty(this.ohide, {display: 'block'});
-            this.settingProperty(this.clear, {display: 'block'});
-            this.settingProperty(this.consoles, {display: 'none'});
-            this.settingProperty(this.content, {display: 'block'});
+            this.controlStatus(true);
         }, false);
         this.ohide.addEventListener('click', () => {
-            this.settingProperty(this.ohide, {display: 'none'});
-            this.settingProperty(this.clear, {display: 'none'});
-            this.settingProperty(this.consoles, {display: 'block'});
-            this.settingProperty(this.content, {display: 'none'});
+            this.controlStatus(false);
         }, false);
         this.clear.addEventListener('click', () => {
             this.clearPrintf();
         }, false)
     };
 
-    Consoles.prototype.clearPrintf = function () {
-        this.pss = this.contain.getElementsByTagName('p');
-        this.removePss();
-    };
-
-    Consoles.prototype.removePss=function () {
-        while (this.pss.length > 0) {
-            this.pss[0].parentNode.removeChild(this.pss[0]);
-        }
-    };
-
-    //主体区域1
+    //主体区域1(绘制render tree相关方法)
 
     Consoles.prototype.prepareEls = function () {
-        this.contain = this.createEls('div');
+        this.controlArr=['contain','consoles','clear','ohide','content'];
+        for (let i=0;i<this.controlArr.length;i++){
+            this[this.controlArr[i]]=this.createEls('div');
+        }
         this.contain.className = 'contain_Consoles';
-        this.consoles = this.createEls('div');
-        this.clear = this.createEls('div');
-        this.ohide = this.createEls('div');
-        this.content = this.createEls('div');
         this.body = document.getElementsByTagName('body')[0];
         this.insert([this.consoles, this.clear, this.ohide, this.content]);
         this.body.appendChild(this.contain);
     };
 
-    Consoles.prototype.createEls = function (eles) {
+    Consoles.prototype.createEls = function (obj, eles) {
         return document.createElement(eles);
     };
 
@@ -132,7 +114,7 @@
         }
     };
 
-    //主体区域2
+    //主体区域2(修改console下的方法并配色相关方法)
 
     Consoles.prototype.batchChangeConsole = function () {
         this.pjArr = ['log', 'info', 'error', 'debug', 'warn'];
@@ -159,7 +141,6 @@
         this.content.appendChild(this.ps);
         this.otherEvent(obj);
     };
-
 
     Consoles.prototype.otherEvent = function (str) {
         switch (str) {
@@ -190,7 +171,40 @@
         }, false);
     };
 
-    window.Consoles = Consoles;
+    //主体区域3（绑定主体事件的相关方法）
 
+    Consoles.prototype.controlStatus = function (status) {
+        let stateArr = [this.ohide, this.clear, this.content, this.consoles];
+        this.decideStatus(status);
+        for (let i = 0; i < stateArr.length; i++) {
+            if (stateArr[i] == this.consoles) {
+                status = !status;
+                this.decideStatus(status);
+            }
+            this.settingProperty(stateArr[i], {display: this.temp});
+        }
+    };
+
+    Consoles.prototype.decideStatus = function (status) {
+        if (status == true) {
+            this.temp = 'block';
+        }
+        else {
+            this.temp = 'none';
+        }
+    };
+
+    Consoles.prototype.clearPrintf = function () {
+        this.pss = this.contain.getElementsByTagName('p');
+        this.removePss();
+    };
+
+    Consoles.prototype.removePss = function () {
+        while (this.pss.length > 0) {
+            this.pss[0].parentNode.removeChild(this.pss[0]);
+        }
+    };
+
+    window.Consoles = Consoles;
 })(window);
 
