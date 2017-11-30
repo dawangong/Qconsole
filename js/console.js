@@ -38,11 +38,14 @@
 
     Consoles.prototype.clearPrintf = function () {
         this.pss = this.contain.getElementsByTagName('p');
+        this.removePss();
+    };
+
+    Consoles.prototype.removePss=function () {
         while (this.pss.length > 0) {
             this.pss[0].parentNode.removeChild(this.pss[0]);
         }
     };
-
 
     //主体区域1
 
